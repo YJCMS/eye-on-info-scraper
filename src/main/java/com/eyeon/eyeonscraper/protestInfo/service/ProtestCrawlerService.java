@@ -23,17 +23,16 @@ import java.awt.Color;
 @Slf4j
 @Service
 public class ProtestCrawlerService {
-    private static final String POST_URL = "https://www.smpa.go.kr/user/nd54882.do?View&uQ=&pageST=SUBJECT&pageSV=&imsi=imsi&page=1&pageSC=SORT_ORDER&pageSO=DESC&dmlType=&boardNo=00319980&returnUrl=https://www.smpa.go.kr:443/user/nd54882.do";
 
     // application.properties에서 설정하거나 직접 경로 지정
     @Value("${spring.webserver.content-path:src/main/resources/static/images}")
     private String imagePath;
 
-    public void crawlPost() {
+    public void crawlPost(String url) {
         try {
 
             //
-            Document postDoc = Jsoup.connect(POST_URL)
+            Document postDoc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36")
                     .timeout(5000)
                     .get();
@@ -47,7 +46,7 @@ public class ProtestCrawlerService {
             // 이미지 다운로드 및 저장
             for (Element img : imageElements) {
                 String imageUrl = img.attr("abs:src");
-                String fileName = generateFileName(imageUrl);
+                String fileName = "protest-image";
                 String savedPath = saveImage(imageUrl, fileName);
                 if (savedPath != null) {
                     savedImageUrls.add("/images/" + fileName); // 웹 접근 경로 저장
@@ -107,13 +106,12 @@ public class ProtestCrawlerService {
         }
     }
 
-
-    private String generateFileName(String imageUrl) {
-        // URL에서 파일명 추출 또는 고유한 파일명 생성
-        String originalFileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-        // 파일명에서 쿼리스트링 제거
-        originalFileName = originalFileName.split("\\?")[0];
-        // 현재 시간을 이용한 고유한 파일명 생성
-        return System.currentTimeMillis() + "_" + originalFileName;
-    }
+//    private String generateFileName(String imageUrl) {
+//        // URL에서 파일명 추출 또는 고유한 파일명 생성
+//        String originalFileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+//        // 파일명에서 쿼리스트링 제거
+//        originalFileName = originalFileName.split("\\?")[0];
+//        // 현재 시간을 이용한 고유한 파일명 생성
+//        return System.currentTimeMillis() + "_" + originalFileName;
+//    }
 }

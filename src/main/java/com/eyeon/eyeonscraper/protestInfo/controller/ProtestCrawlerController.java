@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProtestCrawlerController {
 
     private final ProtestCrawlerService crawlerService;
-    
+    String url = "";
+
     @GetMapping("/crawl")
     public ResponseEntity<String> crawlImages() {
         try {
-            crawlerService.crawlPost();
+            crawlerService.crawlPost(url);
             return ResponseEntity.ok("크롤링이 성공적으로 완료되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
