@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Slf4j
 public class ImageAnalysisService {
+    @Autowired
+    private ProtestInfoPostService protestInfoPostService;
 
     @Value("${anthropic.api-key}")
     private String apiKey;
@@ -102,9 +105,13 @@ public class ImageAnalysisService {
             }
 
             JSONObject jsonResponse = new JSONObject(responseBody);
-            return jsonResponse.getJSONArray("content")
+            String aiResponse = jsonResponse.getJSONArray("content")
                     .getJSONObject(0)
                     .getString("text");
+
+            protestInfoPostService.sendProtestData(aiResponse);
+
+            return aiResponse;
         }
     }
 }
