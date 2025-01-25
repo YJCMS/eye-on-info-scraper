@@ -62,9 +62,9 @@ public class ImageAnalysisService {
         String base64Image = Base64.getEncoder().encodeToString(fileContent);
         log.info("Successfully encoded image to base64");
 
-        // API 요청 본문 생성
+        // API 요청 본문 생성, claude-3-sonnet-20240229
         JSONObject requestBody = new JSONObject()
-                .put("model", "claude-3-sonnet-20240229")
+                .put("model", "claude-3-5-sonnet-20241022")
                 .put("max_tokens", 4096)
                 .put("messages", new JSONObject[]{
                         new JSONObject()
@@ -102,14 +102,9 @@ public class ImageAnalysisService {
             }
 
             JSONObject jsonResponse = new JSONObject(responseBody);
-            String rawText = jsonResponse.getJSONArray("content")
+            return jsonResponse.getJSONArray("content")
                     .getJSONObject(0)
                     .getString("text");
-
-            // JSON 문자열을 파싱하고 다시 변환
-            ObjectMapper objectMapper = new ObjectMapper();
-            Object parsedJson = objectMapper.readValue(rawText, Object.class);
-            return objectMapper.writeValueAsString(parsedJson);
         }
     }
 }
