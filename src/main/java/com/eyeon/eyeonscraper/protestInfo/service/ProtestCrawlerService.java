@@ -105,13 +105,4 @@ public class ProtestCrawlerService {
             return null;
         }
     }
-
-//    private String generateFileName(String imageUrl) {
-//        // URL에서 파일명 추출 또는 고유한 파일명 생성
-//        String originalFileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-//        // 파일명에서 쿼리스트링 제거
-//        originalFileName = originalFileName.split("\\?")[0];
-//        // 현재 시간을 이용한 고유한 파일명 생성
-//        return System.currentTimeMillis() + "_" + originalFileName;
-//    }
 }
